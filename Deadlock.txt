@@ -1,0 +1,68 @@
+import java.util.*;
+class Deadlock
+{
+	public static void main(String args[])
+	{
+		A a=new A();
+		B b=new B();
+		Thread t1=new CustomThread1(a,b);	
+		Thread t2=new CustomThread1(a,b);	
+		t1.start();
+		t2.start();
+	}
+}
+class CustomThread1 extends Thread
+{
+	A a;
+	B b;
+	CustomThread1(A a,B b)
+	{
+		this.a=a;
+		this.b=b;
+	}
+	public void run()
+	{
+		a.m1(b);
+	}
+}
+class CustomThread2 extends Thread
+{
+	A a;
+	B b;
+	CustomThread2(A a,B b)
+	{
+		this.a=a;
+		this.b=b;
+	}
+	public void run()
+	{
+		b.m2(a);
+	}
+}
+class A
+{
+	public synchronized void m1(B b)
+	{
+		System.out.println("first lock");	
+		b.m4();	
+	}
+	public synchronized void m3()
+	{
+		System.out.println("second lock ");	
+	
+	}
+
+}
+class B
+{
+	public synchronized void m2(A a)
+	{
+		System.out.println("third lock");	
+		a.m3();	
+	}
+	public synchronized void m4()
+	{
+		System.out.println("fourth lock ");	
+	
+	}
+}
